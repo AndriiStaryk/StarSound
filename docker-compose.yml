@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  starsound:
+    image: ${DOCKER_REGISTRY-}starsound
+    build:
+      context: .
+      dockerfile: StarSound/Dockerfile
+    depends_on:
+      - sqlserverService
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - weathernet
+
+  sqlserverService:
+    image: mcr.microsoft.com/mssql/server:latest
+    hostname: sqlserverService
+    container_name: sqlserverService
+    environment: 
+      ACCEPT_EULA: Y
+      SA_PASSWORD: eM.O704+Su
+    volumes:
+      - ./data/mssql:/var/opt/mssql3
+    ports:
+      - "1433:1433"
+    networks:
+      - weathernet
+
+networks:
+  weathernet:
+    driver: bridge
