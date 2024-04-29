@@ -23,3 +23,17 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "StarSound.dll"]
+
+
+FROM mcr.microsoft.com/mssql/server:latest
+
+
+RUN apt-get update -y
+
+RUN apt install libgl1-mesa-glx -y
+
+# Install the Kerberos libraries
+#RUN apt-get update && \
+    #apt-get install -y krb5-user && \
+    #apt-get clean
+#

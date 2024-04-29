@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>StarSound</title>
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+    <h1>StarSound</h1>
+    <h3>Add Genre</h3>
+    <form onsubmit="addGenre(); return false;">
+        <input type="text" id="add-name" placeholder="New Genre">
+        <input type="submit" value="Add">
+    </form>
+
+    <div id="editGenre" style="display: none;">
+        <h3>Edit</h3>
+        <form onsubmit="updateGenre(); return false;">
+            <input type="hidden" id="edit-id">
+            <input type="text" id="edit-name">
+            <input type="submit" value="Save">
+            <a href="#" onclick="closeInput();" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <p id="counter"></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="genres"></tbody>
+    </table>
+
+    <script src="js/genres.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        getGenres();
+    </script>
+</body>
+</html>

@@ -11,6 +11,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:8081;http://+:8080
+      - DefaultConnection=Server=sqlserverService;Initial Catalog=StarSound;UserID=Andrii;Password=eM.O704+Su;" Certificate=True;
     ports:
       - "8080:8080"
       - "8081:8081"
