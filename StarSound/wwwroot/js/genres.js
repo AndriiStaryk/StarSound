@@ -12,14 +12,12 @@ function addGenre() {
     const addNameTextbox = document.getElementById('add-name');
 
     const name = addNameTextbox.value.trim()
-
-    // Check if the name is empty
+   
     if (name === '') {
         alert('Please enter a genre name.');
         return;
     }
 
-    // Check if the genre already exists
     if (genres.some(genre => genre.name.toLowerCase() === name.toLowerCase())) {
         alert('Genre with this name already exists.');
         return;
@@ -28,9 +26,6 @@ function addGenre() {
     const genre = {
         name: name,
     };
-
-
-
 
     fetch(uri, {
         method: 'POST',
@@ -66,9 +61,21 @@ function displayEditForm(id) {
 
 function updateGenre() {
     const genreId = document.getElementById('edit-id').value;
+    const name = document.getElementById('edit-name').value.trim()
+
+    if (name === '') {
+        alert('Please enter a genre name.');
+        return;
+    }
+
+    if (genres.some(genre => genre.name.toLowerCase() === name.toLowerCase())) {
+        alert('Genre with this name already exists.');
+        return;
+    }
+
     const genre = {
         id: parseInt(genreId, 10),
-        name: document.getElementById('edit-name').value.trim(),
+        name: name,
     };
 
     fetch(`${uri}/${genreId}`, {

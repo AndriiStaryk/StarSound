@@ -16,6 +16,7 @@ public class Album
 
     public virtual ICollection<Song> Songs { get; set; } = new List<Song>();
 
-    public virtual ICollection<AlbumPerformer> AlbumPerformers { get; set; } = new List<AlbumPerformer>();
+    //public virtual ICollection<AlbumPerformer> AlbumPerformers { get; set; } = new List<AlbumPerformer>();
+    public virtual ICollection<Performer> Performers { get; set; } = new List<Performer>();
 
 }

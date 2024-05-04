@@ -7,100 +7,101 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StarSound.Models;
 
-namespace StarSound.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class PerformersController : ControllerBase
+namespace StarSound.Controllers
 {
-    private readonly StarSoundContext _context;
-
-    public PerformersController(StarSoundContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PerformersController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly StarSoundContext _context;
 
-    // GET: api/Performers
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Performer>>> GetPerformers()
-    {
-        return await _context.Performers.ToListAsync();
-    }
-
-    // GET: api/Performers/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Performer>> GetPerformer(int id)
-    {
-        var performer = await _context.Performers.FindAsync(id);
-
-        if (performer == null)
+        public PerformersController(StarSoundContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        return performer;
-    }
-
-    // PUT: api/Performers/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutPerformer(int id, Performer performer)
-    {
-        if (id != performer.Id)
+        // GET: api/Performers
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Performer>>> GetPerformers()
         {
-            return BadRequest();
+            return await _context.Performers.ToListAsync();
         }
 
-        _context.Entry(performer).State = EntityState.Modified;
+        // GET: api/Performers/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Performer>> GetPerformer(int id)
+        {
+            var performer = await _context.Performers.FindAsync(id);
 
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!PerformerExists(id))
+            if (performer == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+
+            return performer;
         }
 
-        return NoContent();
-    }
-
-    // POST: api/Performers
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPost]
-    public async Task<ActionResult<Performer>> PostPerformer(Performer performer)
-    {
-        _context.Performers.Add(performer);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetPerformer", new { id = performer.Id }, performer);
-    }
-
-    // DELETE: api/Performers/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePerformer(int id)
-    {
-        var performer = await _context.Performers.FindAsync(id);
-        if (performer == null)
+        // PUT: api/Performers/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPerformer(int id, Performer performer)
         {
-            return NotFound();
+            if (id != performer.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(performer).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PerformerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        _context.Performers.Remove(performer);
-        await _context.SaveChangesAsync();
+        // POST: api/Performers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Performer>> PostPerformer(Performer performer)
+        {
+            _context.Performers.Add(performer);
+            await _context.SaveChangesAsync();
 
-        return NoContent();
-    }
+            return CreatedAtAction("GetPerformer", new { id = performer.Id }, performer);
+        }
 
-    private bool PerformerExists(int id)
-    {
-        return _context.Performers.Any(e => e.Id == id);
+        // DELETE: api/Performers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerformer(int id)
+        {
+            var performer = await _context.Performers.FindAsync(id);
+            if (performer == null)
+            {
+                return NotFound();
+            }
+
+            _context.Performers.Remove(performer);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool PerformerExists(int id)
+        {
+            return _context.Performers.Any(e => e.Id == id);
+        }
     }
 }

@@ -14,7 +14,9 @@ public class Playlist
 
     public int CreationYear { get; set; }
     public string Description { get; set; }
-    public virtual ICollection<SongPlaylist> SongPlaylists { get; set; } = new List<SongPlaylist>();
+    //public virtual ICollection<SongPlaylist> SongPlaylists { get; set; } = new List<SongPlaylist>();
+
+    public virtual ICollection<Song> Songs { get; set; } = new List<Song>();
 
 
 

@@ -30,11 +30,18 @@ public class Song
 
     public virtual Album Album { get; set; }
 
-    public virtual ICollection<SongGenre> SongGenres { get; set; } = new List<SongGenre>();
+    //public virtual ICollection<SongGenre> SongGenres { get; set; } = new List<SongGenre>();
+    public virtual ICollection<Genre> Genres { get; set; } = new List<Genre>();
 
-    public virtual ICollection<SongPerformer> SongPerformers { get; set; } = new List<SongPerformer>();
+
+    //public virtual ICollection<SongPerformer> SongPerformers { get; set; } = new List<SongPerformer>();
+
+    public virtual ICollection<Performer> Performers { get; set; } = new List<Performer>();
 
 
-    public virtual ICollection<SongPlaylist> SongPlaylists { get; set; } = new List<SongPlaylist>();
+
+    //public virtual ICollection<SongPlaylist> SongPlaylists { get; set; } = new List<SongPlaylist>();
+    public virtual ICollection<Playlist> Playlists { get; set; } = new List<Playlist>();
+
 
 }

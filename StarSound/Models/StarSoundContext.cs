@@ -7,7 +7,7 @@ public class StarSoundContext : DbContext
 {
     public virtual DbSet<Album> Albums { get; set; }
 
-    public virtual DbSet<AlbumPerformer> AlbumPerformers { get; set; }
+   // public virtual DbSet<AlbumPerformer> AlbumPerformers { get; set; }
 
     public virtual DbSet<Genre> Genres { get; set; }
 
@@ -17,11 +17,11 @@ public class StarSoundContext : DbContext
 
     public virtual DbSet<Song> Songs { get; set; }
 
-    public virtual DbSet<SongGenre> SongGenres { get; set; }
+    //public virtual DbSet<SongGenre> SongGenres { get; set; }
 
-    public virtual DbSet<SongPerformer> SongPerformers { get; set; }
+    //public virtual DbSet<SongPerformer> SongPerformers { get; set; }
 
-    public virtual DbSet<SongPlaylist> SongPlaylists { get; set; }
+    //public virtual DbSet<SongPlaylist> SongPlaylists { get; set; }
 
 
     public StarSoundContext(DbContextOptions<StarSoundContext> options) : base(options)
