@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -19,4 +19,130 @@ html {
 
 body {
   margin-bottom: 60px;
+}*/
+
+
+
+/* Reset CSS */
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+/* Body styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: black; /* Change background to black */
+    color: white; /* Change text color to white */
+    padding: 20px;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    header h1 {
+        font-size: 36px;
+    }
+
+/* Form styles */
+form {
+    margin-bottom: 20px;
+    max-width: 400px;
+}
+
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="checkbox"],
+    form button {
+        display: block;
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #1db954; /* Green border */
+        border-radius: 5px;
+        background-color: #222; /* Dark gray */
+        color: #030110; /* Change text color */
+    }
+
+    form label {
+        margin-left: 5px;
+        color: #1db954; /* Green */
+    }
+
+    form button {
+        background-color: #1db954; /* Green */
+        cursor: pointer;
+    }
+
+/* Adjustments for explicit checkbox */
+.explicit-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+    .explicit-checkbox input[type="checkbox"] {
+        margin-left: 5px;
+    }
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #222; /* Dark gray */
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    color: #fbfbff;
+}
+
+th {
+    background-color: #1db954; /* Green */
+}
+
+/* Section styles */
+section {
+    margin-bottom: 40px;
+}
+
+    section h2 {
+        font-size: 24px;
+        color: #1db954; /* Green */
+        margin-bottom: 20px;
+    }
+
+/* Edit button styles */
+.edit-button {
+    background-color: #1db954; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+    .edit-button:hover {
+        background-color: #168f4a; /* Darker shade of green */
+    }
+
+/* Delete button styles */
+.delete-button {
+    background-color: #c70000; /* Red */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+    .delete-button:hover {
+        background-color: #8f0000; /* Darker shade of red */
+    }
