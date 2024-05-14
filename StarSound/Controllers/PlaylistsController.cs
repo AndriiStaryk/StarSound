@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer.Localisation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,12 +47,32 @@ public class PlaylistsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutPlaylist(int id, Playlist playlist)
     {
-        if (id != playlist.Id)
+        //if (!PlaylistExistsById(id))
+        //{
+        //    return NotFound();
+        //}
+
+        if (PlaylistExists(playlist))
         {
-            return BadRequest();
+            return Conflict("Playlist already exists.");
         }
 
-        _context.Entry(playlist).State = EntityState.Modified;
+
+        var existingPlaylist = await _context.Playlists.FindAsync(id);
+
+        if (existingPlaylist == null)
+        {
+            return NotFound();
+        }
+
+        existingPlaylist.Name = playlist.Name;
+        existingPlaylist.Image = playlist.Image;
+        existingPlaylist.CreationYear = playlist.CreationYear;
+        existingPlaylist.Description = playlist.Description;
+        existingPlaylist.Duration = playlist.Duration;
+        //existingPlaylist.Songs = playlist.Songs;
+
+        //_context.Entry(playlist).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +80,7 @@ public class PlaylistsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PlaylistExists(id))
+            if (!PlaylistExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +98,11 @@ public class PlaylistsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Playlist>> PostPlaylist(Playlist playlist)
     {
+        if (PlaylistExists(playlist))
+        {
+            return Conflict("Playlist already exists.");
+        }
+
         _context.Playlists.Add(playlist);
         await _context.SaveChangesAsync();
 
@@ -99,8 +125,26 @@ public class PlaylistsController : ControllerBase
         return NoContent();
     }
 
-    private bool PlaylistExists(int id)
+    private bool PlaylistExistsById(int id)
     {
         return _context.Playlists.Any(e => e.Id == id);
     }
+
+    public bool PlaylistExists(Playlist playlist)
+    {
+        var wantedPlaylist = _context.Playlists
+            .FirstOrDefault(
+            p => p.Name == playlist.Name &&
+            p.CreationYear == playlist.CreationYear &&
+            p.Description == playlist.Description &&
+            p.Duration == playlist.Duration);
+
+        if (wantedPlaylist != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer.Localisation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,12 +47,34 @@ public class AlbumsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAlbum(int id, Album album)
     {
-        if (id != album.Id)
+        //if (!AlbumExistsById(id))
+        //{
+        //    return NotFound();
+        //}
+
+        if (AlbumExists(album))
         {
-            return BadRequest();
+            return Conflict("Album already exists.");
         }
 
-        _context.Entry(album).State = EntityState.Modified;
+
+        var existingAlbum = await _context.Albums.FindAsync(id);
+
+        if (existingAlbum == null)
+        {
+            return NotFound();
+        }
+
+        existingAlbum.Name = album.Name;
+        existingAlbum.Image = album.Image;
+        existingAlbum.ReleaseYear = album.ReleaseYear;
+        existingAlbum.Description = album.Description;
+        existingAlbum.Duration = album.Duration;
+        //existingAlbum.Songs = album.Songs;
+        //existingAlbum.Performers = album.Performers;
+
+
+        // _context.Entry(album).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +82,7 @@ public class AlbumsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!AlbumExists(id))
+            if (!AlbumExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +100,11 @@ public class AlbumsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Album>> PostAlbum(Album album)
     {
+        if (AlbumExists(album))
+        {
+            return Conflict("Album already exists.");
+        }
+
         _context.Albums.Add(album);
         await _context.SaveChangesAsync();
 
@@ -99,8 +127,28 @@ public class AlbumsController : ControllerBase
         return NoContent();
     }
 
-    private bool AlbumExists(int id)
+    private bool AlbumExistsById(int id)
     {
         return _context.Albums.Any(e => e.Id == id);
     }
+
+    public bool AlbumExists(Album album)
+    {
+        var wantedAlbum = _context.Albums
+            .FirstOrDefault(
+            a => a.Name == album.Name &&
+            a.ReleaseYear == album.ReleaseYear &&
+            a.Description == album.Description &&
+            a.Duration == album.Duration);
+
+        if (wantedAlbum != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
 }

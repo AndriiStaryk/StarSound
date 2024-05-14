@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,12 +47,26 @@ public class GenresController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutGenre(int id, Genre genre)
     {
-        if (id != genre.Id)
+        if (!GenreExistsById(id))
         {
-            return BadRequest();
+            return NotFound();
         }
 
-        _context.Entry(genre).State = EntityState.Modified;
+        if (GenreExists(genre))
+        {
+            return Conflict("Genre already exists.");
+        }
+
+        var existingGenre = await _context.Genres.FindAsync(id);
+
+        if (existingGenre == null)
+        {
+            return NotFound();
+        }
+
+        existingGenre.Name = genre.Name;
+        existingGenre.Image = genre.Image;
+        //existingGenre.Songs = genre.Songs;
 
         try
         {
@@ -59,7 +74,7 @@ public class GenresController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!GenreExists(id))
+            if (!GenreExistsById(id))
             {
                 return NotFound();
             }
@@ -72,11 +87,17 @@ public class GenresController : ControllerBase
         return NoContent();
     }
 
+
     // POST: api/Genres
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<Genre>> PostGenre(Genre genre)
     {
+        if (GenreExists(genre))
+        {
+            return Conflict("Genre already exists.");
+        }
+
         _context.Genres.Add(genre);
         await _context.SaveChangesAsync();
 
@@ -99,8 +120,18 @@ public class GenresController : ControllerBase
         return NoContent();
     }
 
-    private bool GenreExists(int id)
+    private bool GenreExistsById(int id)
     {
         return _context.Genres.Any(e => e.Id == id);
     }
+
+    private bool GenreExists(Genre genre)
+    {
+        var wantedGenre = _context.Genres
+            .FirstOrDefault(g => g.Name.ToLower() == genre.Name.ToLower());
+
+        return wantedGenre != null;
+    }
+
+    //maybe add field by filed valiidation
 }

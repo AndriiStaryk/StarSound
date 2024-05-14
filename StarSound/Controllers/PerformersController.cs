@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer.Localisation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,12 +47,31 @@ public class PerformersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutPerformer(int id, Performer performer)
     {
-        if (id != performer.Id)
+        if (!PerformerExistsById(id))
         {
-            return BadRequest();
+            return NotFound();
         }
 
-        _context.Entry(performer).State = EntityState.Modified;
+        if (PerformerExists(performer))
+        {
+            return Conflict("Performer already exists.");
+        }
+
+        var existingPerformer = await _context.Performers.FindAsync(id);
+
+        if (existingPerformer == null)
+        {
+            return NotFound();
+        }
+
+        existingPerformer.Name = performer.Name;
+        existingPerformer.Image = performer.Image;
+        existingPerformer.Year = performer.Year;
+        //existingPerformer.Albums = performer.Albums;
+        //existingPerformer.Songs = performer.Songs;
+
+
+        //_context.Entry(performer).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +79,7 @@ public class PerformersController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PerformerExists(id))
+            if (!PerformerExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +97,12 @@ public class PerformersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Performer>> PostPerformer(Performer performer)
     {
+
+        if (PerformerExists(performer))
+        {
+            return Conflict("Performer already exists.");
+        }
+
         _context.Performers.Add(performer);
         await _context.SaveChangesAsync();
 
@@ -99,8 +125,24 @@ public class PerformersController : ControllerBase
         return NoContent();
     }
 
-    private bool PerformerExists(int id)
+    private bool PerformerExistsById(int id)
     {
         return _context.Performers.Any(e => e.Id == id);
     }
+
+    public bool PerformerExists(Performer performer)
+    {
+        var wantedPerformer = _context.Performers
+            .FirstOrDefault(
+            p => p.Name == performer.Name &&
+            p.Year == performer.Year);
+
+        if (wantedPerformer != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 }

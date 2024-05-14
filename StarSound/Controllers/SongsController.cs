@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer.Localisation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,12 +47,38 @@ public class SongsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutSong(int id, Song song)
     {
-        if (id != song.Id)
+        //if (id != song.Id)
+        //{
+        //    return BadRequest();
+        //}
+
+        if (SongExists(song))
         {
-            return BadRequest();
+            return Conflict("Song already exists.");
         }
 
-        _context.Entry(song).State = EntityState.Modified;
+        var existingSong = await _context.Songs.FindAsync(id);
+
+        if (existingSong == null)
+        {
+            return NotFound();
+        }
+
+        existingSong.Name = song.Name;
+        existingSong.Image = song.Image;
+        existingSong.ReleaseYear = song.ReleaseYear;
+        existingSong.Duration = song.Duration;
+        existingSong.AlbumId = song.AlbumId;
+        existingSong.IsExplicit = song.IsExplicit;
+        existingSong.IsFavorite = song.IsFavorite;
+        existingSong.Lyrics = song.Lyrics;
+        //existingSong.Performers = song.Performers;
+        //existingSong.Genres = song.Genres;
+        //existingSong.Playlists = song.Playlists;
+
+
+
+        //_context.Entry(song).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +86,7 @@ public class SongsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SongExists(id))
+            if (!SongExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +104,12 @@ public class SongsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Song>> PostSong(Song song)
     {
+
+        if (SongExists(song))
+        {
+            return Conflict("Song already exists.");
+        }
+
         _context.Songs.Add(song);
         await _context.SaveChangesAsync();
 
@@ -99,8 +132,26 @@ public class SongsController : ControllerBase
         return NoContent();
     }
 
-    private bool SongExists(int id)
+    private bool SongExistsById(int id)
     {
         return _context.Songs.Any(e => e.Id == id);
+    }
+
+    public bool SongExists(Song song)
+    {
+        var wantedSong = _context.Songs
+            .FirstOrDefault(
+            s => s.Name == song.Name &&
+            s.ReleaseYear == song.ReleaseYear &&
+            s.IsFavorite == song.IsFavorite &&
+            s.IsExplicit == song.IsExplicit &&
+            s.Duration == song.Duration);
+
+        if (wantedSong != null)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
