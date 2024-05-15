@@ -52,7 +52,7 @@ public class SongsController : ControllerBase
         //    return BadRequest();
         //}
 
-        if (SongExists(song))
+        if (await SongExists(song))
         {
             return Conflict("Song already exists.");
         }
@@ -86,7 +86,7 @@ public class SongsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SongExistsById(id))
+            if (!await SongExistsById(id))
             {
                 return NotFound();
             }
@@ -105,7 +105,7 @@ public class SongsController : ControllerBase
     public async Task<ActionResult<Song>> PostSong(Song song)
     {
 
-        if (SongExists(song))
+        if (await SongExists(song))
         {
             return Conflict("Song already exists.");
         }
@@ -132,15 +132,15 @@ public class SongsController : ControllerBase
         return NoContent();
     }
 
-    private bool SongExistsById(int id)
+    private async Task<bool> SongExistsById(int id)
     {
-        return _context.Songs.Any(e => e.Id == id);
+        return await _context.Songs.AnyAsync(e => e.Id == id);
     }
 
-    public bool SongExists(Song song)
+    private async Task<bool> SongExists(Song song)
     {
-        var wantedSong = _context.Songs
-            .FirstOrDefault(
+        var wantedSong = await _context.Songs
+            .FirstOrDefaultAsync(
             s => s.Name == song.Name &&
             s.ReleaseYear == song.ReleaseYear &&
             s.IsFavorite == song.IsFavorite &&

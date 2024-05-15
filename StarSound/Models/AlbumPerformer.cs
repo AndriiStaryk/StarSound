@@ -8,7 +8,7 @@ public class AlbumPerformer
 
     public int PerformerId { get; set; }
 
-    public virtual Album Album { get; set; }
+    public virtual Album? Album { get; set; }
 
-    public virtual Performer Performer { get; set; }
+    public virtual Performer? Performer { get; set; }
 }

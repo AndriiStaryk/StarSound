@@ -47,12 +47,12 @@ public class GenresController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutGenre(int id, Genre genre)
     {
-        if (!GenreExistsById(id))
+        if (!await GenreExistsById(id))
         {
             return NotFound();
         }
 
-        if (GenreExists(genre))
+        if (await GenreExists(genre))
         {
             return Conflict("Genre already exists.");
         }
@@ -74,7 +74,7 @@ public class GenresController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!GenreExistsById(id))
+            if (!await GenreExistsById(id))
             {
                 return NotFound();
             }
@@ -93,7 +93,7 @@ public class GenresController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Genre>> PostGenre(Genre genre)
     {
-        if (GenreExists(genre))
+        if (await GenreExists(genre))
         {
             return Conflict("Genre already exists.");
         }
@@ -120,15 +120,15 @@ public class GenresController : ControllerBase
         return NoContent();
     }
 
-    private bool GenreExistsById(int id)
+    private async Task<bool> GenreExistsById(int id)
     {
-        return _context.Genres.Any(e => e.Id == id);
+        return await _context.Genres.AnyAsync(e => e.Id == id);
     }
 
-    private bool GenreExists(Genre genre)
+    private async Task<bool> GenreExists(Genre genre)
     {
-        var wantedGenre = _context.Genres
-            .FirstOrDefault(g => g.Name.ToLower() == genre.Name.ToLower());
+        var wantedGenre = await _context.Genres
+            .FirstOrDefaultAsync(g => g.Name.ToLower() == genre.Name.ToLower());
 
         return wantedGenre != null;
     }

@@ -52,7 +52,7 @@ public class AlbumsController : ControllerBase
         //    return NotFound();
         //}
 
-        if (AlbumExists(album))
+        if (await AlbumExists(album))
         {
             return Conflict("Album already exists.");
         }
@@ -82,7 +82,7 @@ public class AlbumsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!AlbumExistsById(id))
+            if (!await AlbumExistsById(id))
             {
                 return NotFound();
             }
@@ -100,7 +100,7 @@ public class AlbumsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Album>> PostAlbum(Album album)
     {
-        if (AlbumExists(album))
+        if (await AlbumExists(album))
         {
             return Conflict("Album already exists.");
         }
@@ -127,15 +127,15 @@ public class AlbumsController : ControllerBase
         return NoContent();
     }
 
-    private bool AlbumExistsById(int id)
+    private async Task<bool> AlbumExistsById(int id)
     {
-        return _context.Albums.Any(e => e.Id == id);
+        return await _context.Albums.AnyAsync(e => e.Id == id);
     }
 
-    public bool AlbumExists(Album album)
+    private async Task<bool> AlbumExists(Album album)
     {
-        var wantedAlbum = _context.Albums
-            .FirstOrDefault(
+        var wantedAlbum = await _context.Albums
+            .FirstOrDefaultAsync(
             a => a.Name == album.Name &&
             a.ReleaseYear == album.ReleaseYear &&
             a.Description == album.Description &&

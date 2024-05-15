@@ -46,12 +46,30 @@ public class AlbumPerformersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAlbumPerformer(int id, AlbumPerformer albumPerformer)
     {
-        if (id != albumPerformer.Id)
+
+        if (await AlbumPerformerExists(albumPerformer))
         {
-            return BadRequest();
+            return Conflict("Album-Perfrmer relation already exists.");
         }
 
-        _context.Entry(albumPerformer).State = EntityState.Modified;
+
+        var existingAlbumPerformer = await _context.AlbumPerformers.FindAsync(id);
+
+        if (existingAlbumPerformer == null)
+        {
+            return NotFound();
+        }
+
+        existingAlbumPerformer.AlbumId = albumPerformer.AlbumId;
+        existingAlbumPerformer.PerformerId = albumPerformer.PerformerId;
+
+
+        //if (id != albumPerformer.Id)
+        //{
+        //    return BadRequest();
+        //}
+
+        //_context.Entry(albumPerformer).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +77,7 @@ public class AlbumPerformersController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!AlbumPerformerExists(id))
+            if (!await AlbumPerformerExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +95,11 @@ public class AlbumPerformersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<AlbumPerformer>> PostAlbumPerformer(AlbumPerformer albumPerformer)
     {
+        if (await AlbumPerformerExists(albumPerformer))
+        {
+            return Conflict("Album-Perfrmer relation already exists.");
+        }
+
         _context.AlbumPerformers.Add(albumPerformer);
         await _context.SaveChangesAsync();
 
@@ -99,8 +122,24 @@ public class AlbumPerformersController : ControllerBase
         return NoContent();
     }
 
-    private bool AlbumPerformerExists(int id)
+    private async Task<bool> AlbumPerformerExistsById(int id)
     {
-        return _context.AlbumPerformers.Any(e => e.Id == id);
+        return await _context.AlbumPerformers.AnyAsync(e => e.Id == id);
     }
+
+    private async Task<bool> AlbumPerformerExists(AlbumPerformer albumPerformer)
+    {
+        var wantedAlbumPerformer = await _context.AlbumPerformers
+            .FirstOrDefaultAsync(
+            ap => ap.AlbumId == albumPerformer.AlbumId &&
+            ap.PerformerId == albumPerformer.PerformerId);
+
+        if (wantedAlbumPerformer != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 }

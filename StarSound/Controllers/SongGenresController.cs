@@ -46,12 +46,30 @@ public class SongGenresController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutSongGenre(int id, SongGenre songGenre)
     {
-        if (id != songGenre.Id)
+
+        if (await SongGenreExists(songGenre))
         {
-            return BadRequest();
+            return Conflict("Song-Genre relation already exists.");
         }
 
-        _context.Entry(songGenre).State = EntityState.Modified;
+
+        var existingSongGenre = await _context.SongGenres.FindAsync(id);
+
+        if (existingSongGenre == null)
+        {
+            return NotFound();
+        }
+
+        existingSongGenre.SongId = songGenre.SongId;
+        existingSongGenre.GenreId = songGenre.GenreId;
+
+
+        //if (id != songGenre.Id)
+        //{
+        //    return BadRequest();
+        //}
+
+        //_context.Entry(songGenre).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +77,7 @@ public class SongGenresController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SongGenreExists(id))
+            if (!await SongGenreExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +95,13 @@ public class SongGenresController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<SongGenre>> PostSongGenre(SongGenre songGenre)
     {
+
+        if (await SongGenreExists(songGenre))
+        {
+            return Conflict("Song-Genre relation already exists.");
+        }
+
+
         _context.SongGenres.Add(songGenre);
         await _context.SaveChangesAsync();
 
@@ -99,8 +124,23 @@ public class SongGenresController : ControllerBase
         return NoContent();
     }
 
-    private bool SongGenreExists(int id)
+    private async Task<bool> SongGenreExistsById(int id)
     {
-        return _context.SongGenres.Any(e => e.Id == id);
+        return await _context.SongGenres.AnyAsync(e => e.Id == id);
     }
+
+    private async Task<bool> SongGenreExists(SongGenre songGenre)
+    {
+        var wantedSongGenre = await _context.SongGenres
+            .FirstOrDefaultAsync(
+            sg => sg.SongId == songGenre.SongId &&
+            sg.GenreId == songGenre.GenreId);
+
+        if (wantedSongGenre != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

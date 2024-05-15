@@ -47,12 +47,12 @@ public class PerformersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutPerformer(int id, Performer performer)
     {
-        if (!PerformerExistsById(id))
+        if (!await PerformerExistsById(id))
         {
             return NotFound();
         }
 
-        if (PerformerExists(performer))
+        if (await PerformerExists(performer))
         {
             return Conflict("Performer already exists.");
         }
@@ -79,7 +79,7 @@ public class PerformersController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PerformerExistsById(id))
+            if (!await PerformerExistsById(id))
             {
                 return NotFound();
             }
@@ -98,7 +98,7 @@ public class PerformersController : ControllerBase
     public async Task<ActionResult<Performer>> PostPerformer(Performer performer)
     {
 
-        if (PerformerExists(performer))
+        if (await PerformerExists(performer))
         {
             return Conflict("Performer already exists.");
         }
@@ -125,15 +125,15 @@ public class PerformersController : ControllerBase
         return NoContent();
     }
 
-    private bool PerformerExistsById(int id)
+    private async Task<bool> PerformerExistsById(int id)
     {
-        return _context.Performers.Any(e => e.Id == id);
+        return await _context.Performers.AnyAsync(e => e.Id == id);
     }
 
-    public bool PerformerExists(Performer performer)
+    private async Task<bool> PerformerExists(Performer performer)
     {
-        var wantedPerformer = _context.Performers
-            .FirstOrDefault(
+        var wantedPerformer = await _context.Performers
+            .FirstOrDefaultAsync(
             p => p.Name == performer.Name &&
             p.Year == performer.Year);
 

@@ -52,7 +52,7 @@ public class PlaylistsController : ControllerBase
         //    return NotFound();
         //}
 
-        if (PlaylistExists(playlist))
+        if (await PlaylistExists(playlist))
         {
             return Conflict("Playlist already exists.");
         }
@@ -80,7 +80,7 @@ public class PlaylistsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PlaylistExistsById(id))
+            if (!await PlaylistExistsById(id))
             {
                 return NotFound();
             }
@@ -98,7 +98,7 @@ public class PlaylistsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Playlist>> PostPlaylist(Playlist playlist)
     {
-        if (PlaylistExists(playlist))
+        if (await PlaylistExists(playlist))
         {
             return Conflict("Playlist already exists.");
         }
@@ -125,15 +125,15 @@ public class PlaylistsController : ControllerBase
         return NoContent();
     }
 
-    private bool PlaylistExistsById(int id)
+    private async Task<bool> PlaylistExistsById(int id)
     {
-        return _context.Playlists.Any(e => e.Id == id);
+        return await _context.Playlists.AnyAsync(e => e.Id == id);
     }
 
-    public bool PlaylistExists(Playlist playlist)
+    private async Task<bool> PlaylistExists(Playlist playlist)
     {
-        var wantedPlaylist = _context.Playlists
-            .FirstOrDefault(
+        var wantedPlaylist = await _context.Playlists
+            .FirstOrDefaultAsync(
             p => p.Name == playlist.Name &&
             p.CreationYear == playlist.CreationYear &&
             p.Description == playlist.Description &&

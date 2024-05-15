@@ -4,103 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StarSound</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Body styles */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: black; /* Change background to black */
-            color: #1db954; /* Change text color to green */
-            padding: 20px;
-        }
-
-        /* Header styles */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-            header h1 {
-                font-size: 36px;
-            }
-
-        /* Form styles */
-        form {
-            margin-bottom: 20px;
-            max-width: 400px;
-        }
-
-            form input[type="text"],
-            form input[type="number"],
-            form input[type="checkbox"],
-            form button {
-                display: block;
-                width: calc(100% - 20px);
-                padding: 10px;
-                margin: 10px 0;
-                border: 1px solid #1db954; /* Green border */
-                border-radius: 5px;
-                background-color: #222; /* Dark gray */
-                color: #030110; /* Change text color */
-            }
-
-            form label {
-                margin-left: 5px;
-                color: #1db954; /* Green */
-            }
-
-            form button {
-                background-color: #1db954; /* Green */
-                cursor: pointer;
-            }
-
-        /* Adjustments for explicit checkbox */
-        .explicit-checkbox {
-            display: flex;
-            align-items: center;
-        }
-
-            .explicit-checkbox input[type="checkbox"] {
-                margin-left: 5px;
-            }
-
-        /* Table styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #222; /* Dark gray */
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            color: #030110; /* Change text color */
-        }
-
-        th {
-            background-color: #1db954; /* Green */
-        }
-
-        /* Section styles */
-        section {
-            margin-bottom: 40px;
-        }
-
-            section h2 {
-                font-size: 24px;
-                color: #1db954; /* Green */
-                margin-bottom: 20px;
-            }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/site.css">
 </head>
 <body>
     <header>
@@ -157,8 +61,9 @@
         </table>
     </section>
 
+    <script src="js/songs.js"></script>
     <script>
-        // Your JavaScript code here
+        getSongs();
     </script>
 </body>
 </html>

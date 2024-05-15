@@ -46,12 +46,30 @@ public class SongPlaylistsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutSongPlaylist(int id, SongPlaylist songPlaylist)
     {
-        if (id != songPlaylist.Id)
+
+        if (await SongPlaylistExists(songPlaylist))
         {
-            return BadRequest();
+            return Conflict("Song-Playlist relation already exists.");
         }
 
-        _context.Entry(songPlaylist).State = EntityState.Modified;
+
+        var existingSongPlaylist = await _context.SongPlaylists.FindAsync(id);
+
+        if (existingSongPlaylist == null)
+        {
+            return NotFound();
+        }
+
+        existingSongPlaylist.SongId = songPlaylist.SongId;
+        existingSongPlaylist.PlaylistId = songPlaylist.PlaylistId;
+
+
+        //if (id != songPlaylist.Id)
+        //{
+        //    return BadRequest();
+        //}
+
+        //_context.Entry(songPlaylist).State = EntityState.Modified;
 
         try
         {
@@ -59,7 +77,7 @@ public class SongPlaylistsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SongPlaylistExists(id))
+            if (!await SongPlaylistExistsById(id))
             {
                 return NotFound();
             }
@@ -77,6 +95,12 @@ public class SongPlaylistsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<SongPlaylist>> PostSongPlaylist(SongPlaylist songPlaylist)
     {
+
+        if (await SongPlaylistExists(songPlaylist))
+        {
+            return Conflict("Song-Playlist relation already exists.");
+        }
+
         _context.SongPlaylists.Add(songPlaylist);
         await _context.SaveChangesAsync();
 
@@ -99,8 +123,22 @@ public class SongPlaylistsController : ControllerBase
         return NoContent();
     }
 
-    private bool SongPlaylistExists(int id)
+    private async Task<bool> SongPlaylistExistsById(int id)
     {
-        return _context.SongPlaylists.Any(e => e.Id == id);
+        return await _context.SongPlaylists.AnyAsync(e => e.Id == id);
+    }
+
+    private async Task<bool> SongPlaylistExists(SongPlaylist songPlaylist)
+    {
+        var wantedSongPlaylist = await _context.SongPlaylists
+            .FirstOrDefaultAsync(
+            sp => sp.SongId == songPlaylist.SongId &&
+            sp.PlaylistId == songPlaylist.PlaylistId);
+
+        if (wantedSongPlaylist != null)
+        {
+            return true;
+        }
+        return false;
     }
 }
