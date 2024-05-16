@@ -11,12 +11,16 @@
         <h1>StarSound</h1>
     </header>
 
-    <section class="add-song">
+    <section class="add-song" id="addSong">
         <h2>Add Song</h2>
         <form id="add-song-form" onsubmit="addSong(); return false;">
             <input type="text" id="add-song-name" placeholder="Song Name" required>
             <input type="number" id="add-album-id" placeholder="Album ID" required>
             <input type="number" id="add-duration" placeholder="Duration (seconds)" required>
+            <div class="explicit-checkbox">
+                <label for="add-is-favorite">Favorite</label>
+                <input type="checkbox" id="add-is-favorite">
+            </div>
             <div class="explicit-checkbox">
                 <label for="add-is-explicit">Explicit</label>
                 <input type="checkbox" id="add-is-explicit">
@@ -34,11 +38,15 @@
             <input type="number" id="edit-album-id" placeholder="Album ID">
             <input type="number" id="edit-duration" placeholder="Duration (seconds)">
             <div class="explicit-checkbox">
+                <label for="edit-is-favorite">Favorite</label>
+                <input type="checkbox" id="edit-is-favorite">
+            </div>
+            <div class="explicit-checkbox">
                 <label for="edit-is-explicit">Explicit</label>
                 <input type="checkbox" id="edit-is-explicit">
             </div>
             <input type="number" id="edit-release-year" placeholder="Release Year">
-            <button type="submit">Save</button>
+            <button type="submit" onclick="updateSong();">Save</button>
             <button type="button" onclick="closeInput();">Close</button>
         </form>
     </section>
@@ -49,7 +57,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Album ID</th>
+                    <th>Album</th>
                     <th>Duration</th>
                     <th>Favorite</th>
                     <th>Explicit</th>
@@ -63,7 +71,7 @@
 
     <script src="js/songs.js"></script>
     <script>
-        getSongs();
+        getThingsReady();
     </script>
 </body>
 </html>

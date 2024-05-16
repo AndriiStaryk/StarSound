@@ -120,3 +120,8 @@ cursor: pointer;
 .delete-button:hover {
     background-color: #8f0000; /* Darker shade of red */
 }
+
+.edit-button,
+.delete-button {
+    margin-right: 10px; /* Adjust the margin as needed */
+}
