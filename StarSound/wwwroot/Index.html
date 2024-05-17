@@ -14,18 +14,34 @@
     <section class="add-song" id="addSong">
         <h2>Add Song</h2>
         <form id="add-song-form" onsubmit="addSong(); return false;">
+            <label for="add-song-name">Song Name</label>
             <input type="text" id="add-song-name" placeholder="Song Name" required>
-            <input type="number" id="add-album-id" placeholder="Album ID" required>
+
+            <label for="performer-dropdown">Performer</label>
+            <select id="performer-dropdown" required>
+                <option value="" disabled selected>Select Performer</option>
+            </select>
+
+            <label for="album-dropdown">Album</label>
+            <select id="album-dropdown" required>
+                <option value="" disabled selected>Select Album</option>
+            </select>
+
+            <label for="add-duration">Duration (seconds)</label>
             <input type="number" id="add-duration" placeholder="Duration (seconds)" required>
+
             <div class="explicit-checkbox">
-                <label for="add-is-favorite">Favorite</label>
                 <input type="checkbox" id="add-is-favorite">
+                <label for="add-is-favorite">Favorite</label>
             </div>
             <div class="explicit-checkbox">
-                <label for="add-is-explicit">Explicit</label>
                 <input type="checkbox" id="add-is-explicit">
+                <label for="add-is-explicit">Explicit</label>
             </div>
+
+            <label for="add-release-year">Release Year</label>
             <input type="number" id="add-release-year" placeholder="Release Year" required>
+
             <button type="submit">Add</button>
         </form>
     </section>
@@ -34,22 +50,43 @@
         <h2>Edit Song</h2>
         <form id="edit-song-form" onsubmit="updateSong(); return false;">
             <input type="hidden" id="edit-id">
+
+            <label for="edit-song-name">Song Name</label>
             <input type="text" id="edit-song-name" placeholder="Song Name">
-            <input type="number" id="edit-album-id" placeholder="Album ID">
+
+            <label for="edit-performer-dropdown">Performer</label>
+            <select id="edit-performer-dropdown" required>
+                <option value="" disabled selected>Select Performer</option>
+            </select>
+
+            <label for="edit-album-dropdown">Album</label>
+            <select id="edit-album-dropdown" required>
+                <option value="" disabled selected>Select Album</option>
+            </select>
+
+            <label for="edit-duration">Duration (seconds)</label>
             <input type="number" id="edit-duration" placeholder="Duration (seconds)">
+
             <div class="explicit-checkbox">
-                <label for="edit-is-favorite">Favorite</label>
                 <input type="checkbox" id="edit-is-favorite">
+                <label for="edit-is-favorite">Favorite</label>
             </div>
             <div class="explicit-checkbox">
-                <label for="edit-is-explicit">Explicit</label>
                 <input type="checkbox" id="edit-is-explicit">
+                <label for="edit-is-explicit">Explicit</label>
             </div>
+
+            <label for="edit-release-year">Release Year</label>
             <input type="number" id="edit-release-year" placeholder="Release Year">
+
             <button type="submit" onclick="updateSong();">Save</button>
             <button type="button" onclick="closeInput();">Close</button>
         </form>
     </section>
+
+
+
+
 
     <section class="songs">
         <h2>Songs</h2>
@@ -57,6 +94,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Performer</th>
                     <th>Album</th>
                     <th>Duration</th>
                     <th>Favorite</th>

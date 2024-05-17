@@ -1,36 +1,36 @@
 * {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 /* Body styles */
 body {
-font-family: 'Roboto', sans-serif;
-background-color: black; /* Change background to black */
-color: white; /* Change text color to white */
-padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: black; /* Change background to black */
+    color: white; /* Change text color to white */
+    padding: 20px;
 }
 
 /* Header styles */
 header {
-text-align: center;
-margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-header h1 {
-    font-size: 36px;
-}
+    header h1 {
+        font-size: 36px;
+    }
 
 /* Form styles */
 form {
-margin-bottom: 20px;
-max-width: 400px;
+    margin-bottom: 20px;
+    max-width: 400px;
 }
 
     form input[type="text"],
     form input[type="number"],
-    form input[type="checkbox"],
+    form select,
     form button {
         display: block;
         width: calc(100% - 20px);
@@ -40,6 +40,7 @@ max-width: 400px;
         border-radius: 5px;
         background-color: #444; /* Change background color to light dark */
         color: #fff; /* Change text color to white */
+        font-size: 16px;
     }
 
     /* Form label styles */
@@ -48,78 +49,83 @@ max-width: 400px;
         color: #1db954; /* Green */
     }
 
-form button {
-    background-color: #1db954; /* Green */
-    cursor: pointer;
-}
+    form button {
+        background-color: #1db954; /* Green */
+        cursor: pointer;
+    }
 
-/* Adjustments for explicit checkbox */
+/* Explicit checkbox styles */
 .explicit-checkbox {
-display: flex;
-align-items: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.explicit-checkbox input[type="checkbox"] {
-    margin-left: 5px;
-}
+    .explicit-checkbox input[type="checkbox"] {
+        margin-left: 0;
+        margin-right: 10px;
+        width: 20px; /* Slightly larger width */
+        height: 20px; /* Slightly larger height */
+        cursor: pointer;
+    }
 
 /* Table styles */
 table {
-width: 100%;
-border-collapse: collapse;
-background-color: #222; /* Dark gray */
-margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #222; /* Dark gray */
+    margin-top: 20px;
 }
 
 th, td {
-border: 1px solid #ddd;
-padding: 10px;
-text-align: left;
-color: #fbfbff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    color: #fbfbff;
 }
 
 th {
-background-color: #1db954; /* Green */
+    background-color: #1db954; /* Green */
 }
 
 /* Section styles */
 section {
-margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
-section h2 {
-    font-size: 24px;
-    color: #1db954; /* Green */
-    margin-bottom: 20px;
-}
+    section h2 {
+        font-size: 24px;
+        color: #1db954; /* Green */
+        margin-bottom: 20px;
+    }
 
 /* Edit button styles */
 .edit-button {
-background-color: #1db954; /* Green */
-color: white;
-border: none;
-border-radius: 5px;
-padding: 5px 10px;
-cursor: pointer;
+    background-color: #1db954; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
-.edit-button:hover {
-    background-color: #168f4a; /* Darker shade of green */
-}
+    .edit-button:hover {
+        background-color: #168f4a; /* Darker shade of green */
+    }
 
 /* Delete button styles */
 .delete-button {
-background-color: #c70000; /* Red */
-color: white;
-border: none;
-border-radius: 5px;
-padding: 5px 10px;
-cursor: pointer;
+    background-color: #c70000; /* Red */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
-.delete-button:hover {
-    background-color: #8f0000; /* Darker shade of red */
-}
+    .delete-button:hover {
+        background-color: #8f0000; /* Darker shade of red */
+    }
 
 .edit-button,
 .delete-button {
